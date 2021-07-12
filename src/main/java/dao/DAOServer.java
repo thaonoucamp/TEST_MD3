@@ -16,7 +16,8 @@ public class DAOServer implements IDAO<Product> {
     private final String INSERT_INTO_QUERY = "insert into product(`name`, price, quantity, color, description, category) values (?, ?, ?, ?, ?, ?);";
     private final String SHOW_ALL_QUERY = "SELECT * FROM product;";
     private final String FIND_NAME_QUERY = "select * from product where name like ?;";
-    private final String UPDATE_QUERY = "UPDATE product SET name = ?,  price = ?, quantity = ?, color=?, description=?, category = ?, WHERE (id = ?);";
+    private final String FIND_ID_QUERY = "select * from product where id = ?;";
+    private final String UPDATE_QUERY = "UPDATE product SET `name` = ?,  price = ?, quantity = ?, color=?, description=?, category = ? WHERE (id = ?);";
     private final String DELETE_QUERY = "DELETE FROM product WHERE (id = ?);";
 
     ConnecMySQL connecMySQL = new ConnecMySQL();
@@ -68,6 +69,29 @@ public class DAOServer implements IDAO<Product> {
         return list;
     }
 
+    public Product findId(int id) throws SQLException {
+        Product product = null;
+        connection = connecMySQL.getConnection();
+        statement = connection.prepareStatement(FIND_ID_QUERY);
+        statement.setInt(1, id);
+        resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            id = resultSet.getInt("id");
+            String name = resultSet.getString("name");
+
+            double price = resultSet.getDouble("price");
+            int quantity = resultSet.getInt("quantity");
+            String color = resultSet.getString("color");
+            String description = resultSet.getString("description");
+            int category = resultSet.getInt("category");
+
+            product = new Product(id, name, price, quantity, color, description, category);
+        }
+
+        return product;
+    }
+
     @Override
     public void add(Product product) throws SQLException {
         connection = connecMySQL.getConnection();
@@ -84,8 +108,7 @@ public class DAOServer implements IDAO<Product> {
     }
 
     @Override
-    public Product edit(int id) throws SQLException {
-        Product product = new Product();
+    public void edit(int id, Product product) throws SQLException {
 
         connection = connecMySQL.getConnection();
         statement = connection.prepareStatement(UPDATE_QUERY);
@@ -98,10 +121,9 @@ public class DAOServer implements IDAO<Product> {
         statement.setInt(6, product.getCategory());
         statement.setInt(7, id);
 
-
         statement.executeUpdate();
 
-        return product;
+
     }
 
     @Override
@@ -109,6 +131,7 @@ public class DAOServer implements IDAO<Product> {
         connection = connecMySQL.getConnection();
         statement = connection.prepareStatement(DELETE_QUERY);
         statement.setInt(1, id);
+
         statement.executeUpdate();
     }
 }

@@ -26,6 +26,20 @@ public class ServletCotroller extends HttpServlet {
             case "add":
                 showFormAdd(request, response);
                 break;
+            case "edit":
+                try {
+                    showFormEdit(request, response);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                break;
+            case "delete":
+                try {
+                    delete(request, response);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                break;
             case "find":
                 try {
                     find(request, response);
@@ -44,14 +58,22 @@ public class ServletCotroller extends HttpServlet {
     }
 
     private void showFormAdd(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        dispatcher = request.getRequestDispatcher("/add.jsp");
-        dispatcher.forward(request, response);
+dispatcher = request.getRequestDispatcher("/add.jsp");
+dispatcher.forward(request, response);
     }
 
     private void showAllProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         List<Product> productList = dao.showAll();
         request.setAttribute("productList", productList);
         dispatcher = request.getRequestDispatcher("/showAll.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void showFormEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Product product = dao.findId(id);
+        request.setAttribute("product", product);
+        dispatcher = request.getRequestDispatcher("/edit.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -87,6 +109,13 @@ public class ServletCotroller extends HttpServlet {
                     throwables.printStackTrace();
                 }
                 break;
+            case "edit":
+                try {
+                    edit(request, response);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                break;
             default:
                 try {
                     showAllProduct(request, response);
@@ -114,7 +143,26 @@ public class ServletCotroller extends HttpServlet {
     private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         int id = Integer.parseInt(request.getParameter("id"));
         dao.delete(id);
-        dispatcher = request.getRequestDispatcher("/showAll.jsp");
-        dispatcher.forward(request, response);
+
+        showAllProduct(request, response);
+
+    }
+
+
+    private void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        String name = request.getParameter("name");
+        double price = Double.parseDouble(request.getParameter("price"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        String color = request.getParameter("color");
+        String description = request.getParameter("description");
+        int category = Integer.parseInt(request.getParameter("category"));
+
+        Product product = new Product(id, name, price, quantity, color, description, category);
+
+        dao.edit(id, product);
+showAllProduct(request, response);
+
     }
 }

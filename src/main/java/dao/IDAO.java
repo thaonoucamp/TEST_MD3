@@ -10,7 +10,7 @@ public interface IDAO<T> {
 
     void add(T t) throws SQLException;
 
-    T edit(int id) throws SQLException;
+    void edit(int id, T t) throws SQLException;
 
     void delete(int id) throws SQLException;
 

@@ -4,9 +4,9 @@ model/Product.java
  model.Product
 dao/ConnecMySQL.java
  dao.ConnecMySQL
+dao/IDAO.java
+ dao.IDAO
 dao/DAOServer.java
  dao.DAOServer
 controller/ServletCotroller.java
  controller.ServletCotroller
-dao/IDAO.java
- dao.IDAO

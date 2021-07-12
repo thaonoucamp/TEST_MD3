@@ -22,27 +22,42 @@
 
             <tr>
                 <th>NAME</th>
-                <td>${product.name}</td>
+                <td>
+                    <input type="text" name="name" value=" ${product.name}">
+                </td>
             </tr>
             <tr>
                 <th>PRICE</th>
-                <td>${product.price}</td>
+                <td>
+                    <input type="text" name="price" value="${product.price}">
+                </td>
             </tr>
             <tr>
                 <th>QUANTITY</th>
-                <td>${product.quantity}</td>
+                <td>
+                    <input type="text" name="quantity" value="${product.quantity}">
+              </td>
             </tr>
             <tr>
                 <th>COLOR</th>
-                <td>${product.color}</td>
+                <td>
+                    <input type="text" name="color" value="  ${product.color}">
+                </td>
             </tr>
             <tr>
                 <th>DESCRIPTION</th>
-                <td>${product.description}</td>
+                <td><input type="text" name="description" value=" ${product.description}"></td>
+
+                </td>
             </tr>
             <tr>
                 <th>CATEGORY</th>
-                <td>${product.category}</td>
+                <td>
+                    <input type="text" name="category" value="${product.category}"></td>
+                </td>
+            </tr>
+            <tr>
+                <button>SAVE</button>
             </tr>
         </table>
 
